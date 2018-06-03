@@ -9,6 +9,9 @@ import android.widget.TextView;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import es.ipm.unir.weatherapp.R;
 import es.ipm.unir.weatherapp.solution.App;
 import es.ipm.unir.weatherapp.solution.model.pojo.City;
@@ -19,36 +22,36 @@ public class MainActivityImpl extends AppCompatActivity implements MainActivity,
     @Inject
     MainActivityPresenter presenter;
 
-    View loadingLayout;
-    View contentLayout;
-    View errorLayout;
-    TextView updateTimeTV;
-    TextView temperatureTV;
-    TextView weatherTV;
-    TextView cityNameTV;
-    TextView asteroidTV;
-    Switch temperatureSwitch;
+    @BindView(R.id.loading_layout) View loadingLayout;
+    @BindView(R.id.content_layout) View contentLayout;
+    @BindView(R.id.error_layout) View errorLayout;
+    @BindView(R.id.updatetime_tv) TextView updateTimeTV;
+    @BindView(R.id.temperature_tv) TextView temperatureTV;
+    @BindView(R.id.weatherdescr_tv) TextView weatherTV;
+    @BindView(R.id.cityname_tv) TextView cityNameTV;
+    @BindView(R.id.asteroid_tv) TextView asteroidTV;
+    @BindView(R.id.temperature_switch) Switch temperatureSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         App.getAppComponent().inject(this);
+        setContentView(R.layout.activity_main);
 
-        loadingLayout = findViewById(R.id.loading_layout);
-        contentLayout = findViewById(R.id.content_layout);
-        errorLayout = findViewById(R.id.error_layout);
-        cityNameTV = (TextView) findViewById(R.id.cityname_tv);
-        updateTimeTV = (TextView) findViewById(R.id.updatetime_tv);
-        temperatureTV = (TextView) findViewById(R.id.temperature_tv);
-        weatherTV = (TextView) findViewById(R.id.weatherdescr_tv);
-        asteroidTV = (TextView) findViewById(R.id.asteroid_tv);
-        temperatureSwitch = (Switch) findViewById(R.id.temperature_switch);
-
-        errorLayout.setOnClickListener(this);
-        temperatureSwitch.setOnCheckedChangeListener(this);
+        ButterKnife.bind(this);
 
         presenter.setView(this);
         presenter.create();
+    }
+
+    @OnClick(R.id.error_layout)
+    void onErrorLayout(){
+        presenter.onErrorLayoutClick();
+    }
+
+    @OnClick(R.id.temperature_switch)
+    void onTemperatureSwitch(){
+        temperatureSwitch.setOnCheckedChangeListener(this);
     }
 
     @Override
@@ -83,7 +86,9 @@ public class MainActivityImpl extends AppCompatActivity implements MainActivity,
 
     @Override
     public void showContent() {
-
+        contentLayout.setVisibility(View.VISIBLE);
+        loadingLayout.setVisibility(View.INVISIBLE);
+        errorLayout.setVisibility(View.GONE);
     }
 
     @Override

@@ -3,6 +3,7 @@ package es.ipm.unir.weatherapp.solution.presenter;
 import android.content.Context;
 
 import es.ipm.unir.weatherapp.solution.model.Model;
+import es.ipm.unir.weatherapp.solution.ui.MainActivity;
 import es.ipm.unir.weatherapp.solution.ui.MainActivityImpl;
 
 public interface MainActivityPresenter {
@@ -10,5 +11,5 @@ public interface MainActivityPresenter {
     void destroy();
     void onErrorLayoutClick();
     void checkChanged(boolean isChecked);
-    void setView(MainActivityImpl mainActivity);
+    void setView(MainActivity mainActivity);
 }

@@ -1,9 +1,7 @@
-package es.ipm.unir.weatherapp.utilities;
+package es.ipm.unir.weatherapp.solution.api;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import es.ipm.unir.weatherapp.solution.model.APIManagerResponse;
 
 public class APIManager {
     ExecutorService executorService;

@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".solution.ui.MainActivityImpl_legacy"
+        <activity android:name=".solution.ui.MainActivityImpl"
             android:label="MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,4 +1,4 @@
-package es.ipm.unir.weatherapp.solution.ui;
+package es.ipm.unir.weatherapp.solution.api;
 
 import es.ipm.unir.weatherapp.solution.model.pojo.City;
 import es.ipm.unir.weatherapp.solution.model.pojo.WeatherAPIResponse;

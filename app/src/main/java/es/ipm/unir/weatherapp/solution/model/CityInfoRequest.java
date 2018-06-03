@@ -17,8 +17,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import es.ipm.unir.weatherapp.solution.model.pojo.City;
-import es.ipm.unir.weatherapp.utilities.APIBaseRunnable;
-import es.ipm.unir.weatherapp.utilities.Utils;
+import es.ipm.unir.weatherapp.solution.api.APIBaseRunnable;
+import es.ipm.unir.weatherapp.solution.utilities.Utils;
 
 public class CityInfoRequest extends APIBaseRunnable<City> {
 

@@ -1,4 +1,4 @@
-package es.ipm.unir.weatherapp.solution.model;
+package es.ipm.unir.weatherapp.solution.presenter;
 
 import es.ipm.unir.weatherapp.solution.model.pojo.City;
 import es.ipm.unir.weatherapp.solution.model.pojo.MedidaTemperatura;

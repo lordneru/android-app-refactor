@@ -5,28 +5,32 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import es.ipm.unir.weatherapp.solution.App;
-import es.ipm.unir.weatherapp.utilities.APIEndpoints;
+import es.ipm.unir.weatherapp.solution.api.APIEndpoints;
+import es.ipm.unir.weatherapp.solution.api.WeatherAPIResponseMapperCity;
 import es.ipm.unir.weatherapp.solution.model.pojo.City;
 import es.ipm.unir.weatherapp.solution.model.pojo.MedidaTemperatura;
 import es.ipm.unir.weatherapp.solution.model.pojo.WeatherAPIResponse;
-import es.ipm.unir.weatherapp.solution.ui.WeatherAPIResponseMapperCity;
+import es.ipm.unir.weatherapp.solution.presenter.Presenter2Model;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
 
-public class Model implements Presenter2Model{
+public class Model implements Presenter2Model {
 
     @Inject
+    @Named("apiBaseUrl")
     String apiBaseUrl;
 
     @Inject
     String apiToken;
+
+    @Inject
+    Retrofit retrofit;
 
     private final static String TEMP_KEY = "tempkey";
     private final Context context;
@@ -37,11 +41,6 @@ public class Model implements Presenter2Model{
         this.context = context;
         App.getAppComponent().inject(this);
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(apiBaseUrl)
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
         api = retrofit.create(APIEndpoints.class);
     }
 
@@ -59,20 +58,20 @@ public class Model implements Presenter2Model{
 
     @Override
     public Observable<City> update() {
-        Observable<City> observable1 = api.getCityWeather("Madrid", "json", apiToken)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .map(new WeatherAPIResponseMapperCity());
-
         return api.getCityWeather("Madrid", "json", apiToken)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .mergeWith(new Observable<WeatherAPIResponse>() {
-                    @Override
-                    protected void subscribeActual(Observer<? super WeatherAPIResponse> observer) {
-
-                    }
-                })
                 .map(new WeatherAPIResponseMapperCity());
+
+//        return api.getCityWeather("Madrid", "json", apiToken)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .mergeWith(new Observable<WeatherAPIResponse>() {
+//                    @Override
+//                    protected void subscribeActual(Observer<? super WeatherAPIResponse> observer) {
+//
+//                    }
+//                })
+//                .map(new WeatherAPIResponseMapperCity());
     }
 }

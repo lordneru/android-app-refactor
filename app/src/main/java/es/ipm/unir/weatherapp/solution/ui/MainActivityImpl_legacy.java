@@ -32,7 +32,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import es.ipm.unir.weatherapp.solution.model.pojo.City;
 import es.ipm.unir.weatherapp.R;
-import es.ipm.unir.weatherapp.utilities.Utils;
+import es.ipm.unir.weatherapp.solution.utilities.Utils;
 
 public class MainActivityImpl_legacy extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
 

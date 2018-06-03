@@ -4,14 +4,13 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 
-import es.ipm.unir.weatherapp.solution.model.APIManagerResponse;
+import es.ipm.unir.weatherapp.solution.api.APIManagerResponse;
 import es.ipm.unir.weatherapp.solution.model.CityInfoRequest;
 import es.ipm.unir.weatherapp.solution.model.Model;
 import es.ipm.unir.weatherapp.solution.model.UserPreferenceManager;
 import es.ipm.unir.weatherapp.solution.model.pojo.City;
 import es.ipm.unir.weatherapp.solution.ui.MainActivity;
-import es.ipm.unir.weatherapp.solution.ui.MainActivityImpl;
-import es.ipm.unir.weatherapp.utilities.APIManager;
+import es.ipm.unir.weatherapp.solution.api.APIManager;
 
 public class MainActivityPresenterImpl implements MainActivityPresenter, APIManagerResponse {
 
@@ -23,27 +22,23 @@ public class MainActivityPresenterImpl implements MainActivityPresenter, APIMana
     public MainActivityPresenterImpl(Context context, Model model){
         this.context = context;
         this.model = model;
+        apiManager = new APIManager(this);
     }
-
-//    public MainActivityPresenterImpl(Context context, Model model, MainActivity view){
-//        this.context = context;
-//        this.model = model;
-//        this.view = view;
-//    }
 
     @Override
     public void create() {
-//        if (view != null) {
-//            boolean isCelsius = UserPreferenceManager_3.getInstance().userPrefersCelsius(context);
-//            view.setSwitchCheck(!isCelsius);
-//        }
+        if (view != null) {
+            boolean isCelsius = UserPreferenceManager.getInstance().userPrefersCelsius(context);
+            view.setSwitchCheck(!isCelsius);
+        }
 
         updateData();
     }
 
     private void updateData() {
         view.showLoading();
-        apiManager.executeAPIRequest(new CityInfoRequest());
+        model.update();
+//        apiManager.executeAPIRequest(new CityInfoRequest());
     }
 
     @Override
@@ -68,8 +63,8 @@ public class MainActivityPresenterImpl implements MainActivityPresenter, APIMana
     }
 
     @Override
-    public void setView(MainActivityImpl mainActivity) {
-
+    public void setView(MainActivity mainActivity) {
+        view = mainActivity;
     }
 
     @Override
@@ -77,16 +72,17 @@ public class MainActivityPresenterImpl implements MainActivityPresenter, APIMana
         final City city = (City) data;
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
-            public void run() {if (city == null) {
-                view.showError();
-            } else {
-                boolean isCelsius = UserPreferenceManager.getInstance().userPrefersCelsius(context);
+            public void run() {
+                if (city == null) {
+                    view.showError();
+                } else {
+                    boolean isCelsius = UserPreferenceManager.getInstance().userPrefersCelsius(context);
 
-                city.setTemperature(isCelsius ? city.getTemperature() - 273.15 : city.getTemperature());
-                view.updateView(city, isCelsius ? "ºC" : "K");
+                    city.setTemperature(isCelsius ? city.getTemperature() - 273.15 : city.getTemperature());
+                    view.updateView(city, isCelsius ? "ºC" : "K");
 
-                view.showContent();
-            }
+                    view.showContent();
+                }
             }
         });
     }
