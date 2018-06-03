@@ -1,4 +1,4 @@
-package es.ipm.unir.weatherapp;
+package es.ipm.unir.weatherapp.solution.model.pojo;
 
 public class City {
 

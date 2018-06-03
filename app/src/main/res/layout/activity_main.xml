@@ -13,7 +13,7 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
         android:orientation="vertical"
-        tools:context="es.ipm.unir.weatherapp.solution.MainActivity">
+        tools:context="es.ipm.unir.weatherapp.solution.ui.MainActivityImpl_legacy">
 
         <LinearLayout
             android:layout_width="match_parent"

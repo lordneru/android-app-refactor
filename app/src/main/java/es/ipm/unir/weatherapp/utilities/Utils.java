@@ -1,4 +1,4 @@
-package es.ipm.unir.weatherapp;
+package es.ipm.unir.weatherapp.utilities;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;

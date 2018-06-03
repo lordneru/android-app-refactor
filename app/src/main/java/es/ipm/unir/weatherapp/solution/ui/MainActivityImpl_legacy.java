@@ -1,4 +1,4 @@
-package es.ipm.unir.weatherapp.solution;
+package es.ipm.unir.weatherapp.solution.ui;
 
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -30,11 +30,11 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import es.ipm.unir.weatherapp.City;
+import es.ipm.unir.weatherapp.solution.model.pojo.City;
 import es.ipm.unir.weatherapp.R;
-import es.ipm.unir.weatherapp.Utils;
+import es.ipm.unir.weatherapp.utilities.Utils;
 
-public class MainActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
+public class MainActivityImpl_legacy extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
 
     private final static String WEATHER_API_TOKEN = "ec4e98347c55d9bbea652c638940c0fc";
     private final static String WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?q=Madrid&mode=xml&appid=" + WEATHER_API_TOKEN;
