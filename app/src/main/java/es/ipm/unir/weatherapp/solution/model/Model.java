@@ -62,16 +62,5 @@ public class Model implements Presenter2Model {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new WeatherAPIResponseMapperCity());
-
-//        return api.getCityWeather("Madrid", "json", apiToken)
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .mergeWith(new Observable<WeatherAPIResponse>() {
-//                    @Override
-//                    protected void subscribeActual(Observer<? super WeatherAPIResponse> observer) {
-//
-//                    }
-//                })
-//                .map(new WeatherAPIResponseMapperCity());
     }
 }

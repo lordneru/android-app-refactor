@@ -5,31 +5,25 @@ import android.os.Handler;
 import android.os.Looper;
 
 import es.ipm.unir.weatherapp.solution.api.APIManagerResponse;
-import es.ipm.unir.weatherapp.solution.model.CityInfoRequest;
 import es.ipm.unir.weatherapp.solution.model.Model;
-import es.ipm.unir.weatherapp.solution.model.UserPreferenceManager;
 import es.ipm.unir.weatherapp.solution.model.pojo.City;
+import es.ipm.unir.weatherapp.solution.model.pojo.MedidaTemperatura;
 import es.ipm.unir.weatherapp.solution.ui.MainActivity;
-import es.ipm.unir.weatherapp.solution.api.APIManager;
+import io.reactivex.observers.DisposableObserver;
 
 public class MainActivityPresenterImpl implements MainActivityPresenter, APIManagerResponse {
 
     private MainActivity view;
     private Model model;
-    private Context context;
-    private APIManager apiManager;
 
     public MainActivityPresenterImpl(Context context, Model model){
-        this.context = context;
         this.model = model;
-        apiManager = new APIManager(this);
     }
 
     @Override
     public void create() {
         if (view != null) {
-            boolean isCelsius = UserPreferenceManager.getInstance().userPrefersCelsius(context);
-            view.setSwitchCheck(!isCelsius);
+            view.setSwitchCheck(model.getTempPref().isCelsius());
         }
 
         updateData();
@@ -37,14 +31,29 @@ public class MainActivityPresenterImpl implements MainActivityPresenter, APIMana
 
     private void updateData() {
         view.showLoading();
-        model.update();
-//        apiManager.executeAPIRequest(new CityInfoRequest());
+
+        model.update()
+                .subscribe(new DisposableObserver<City>() {
+                    @Override
+                    public void onNext(City body) {
+                        onAPIResponse(body);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        onDataLoadError();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
     @Override
     public void destroy() {
         this.view = null;
-        this.context = null;
     }
 
     @Override
@@ -55,11 +64,15 @@ public class MainActivityPresenterImpl implements MainActivityPresenter, APIMana
     @Override
     public void checkChanged(boolean isChecked) {
         if (isChecked) {
-            UserPreferenceManager.getInstance().setUserPrefersKelvin(context);
+            model.setPrefs(MedidaTemperatura.KEL);
         } else {
-            UserPreferenceManager.getInstance().setUserPrefersCelsius(context);
+            model.setPrefs(MedidaTemperatura.CEL);
         }
         updateData();
+    }
+
+    private void onDataLoadError() {
+        view.showError();
     }
 
     @Override
@@ -76,11 +89,10 @@ public class MainActivityPresenterImpl implements MainActivityPresenter, APIMana
                 if (city == null) {
                     view.showError();
                 } else {
-                    boolean isCelsius = UserPreferenceManager.getInstance().userPrefersCelsius(context);
+                    MedidaTemperatura temp = model.getTempPref();
 
-                    city.setTemperature(isCelsius ? city.getTemperature() - 273.15 : city.getTemperature());
-                    view.updateView(city, isCelsius ? "ºC" : "K");
-
+                    city.setTemperature(temp.getTempValueByType(city.getTemperature(), temp));
+                    view.updateView(city, temp.getClaveForMedida());
                     view.showContent();
                 }
             }
